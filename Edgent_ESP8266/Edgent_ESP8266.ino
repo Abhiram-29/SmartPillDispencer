@@ -29,7 +29,6 @@ void setup()
   Serial.begin(115200);
   delay(100);
   s1.attach(12); 
-  //s2.attach(16);
   Rtc.Begin();
   RtcDateTime compiled = RtcDateTime(__DATE__, __TIME__);
   Rtc.SetDateTime(compiled);
@@ -55,18 +54,6 @@ BLYNK_WRITE(V0)
     }
 }
 
-// BLYNK_WRITE(V1)
-// {
-//     int value = param.asInt();
-//     if(value == 1){
-//       s2.write(180);
-//       delay(1000);
-//       s2.write(0);
-//       delay(1000);
-//       Serial.println("Servo2 activated");
-//     }
-// }
-
 BLYNK_WRITE(V2){
  alarm1 = param[0].asInt();
  if(alarm1 == 0)
@@ -74,14 +61,6 @@ BLYNK_WRITE(V2){
   alarm1 = 999999;
  }
 }
-
-// BLYNK_WRITE(V3){
-//  alarm2 = param[0].asInt();
-//  if(alarm2 == 0)
-//  {
-//   alarm2 = 999999;
-//  }
-//}
 
 void loop() {
   BlynkEdgent.run();
@@ -99,13 +78,5 @@ void loop() {
      Serial.println(Rtc.GetDateTime().Hour());
 
    }
-  //  if(alarm2 == currentTime){
-  //    s2.write(180);
-  //    delay(1000);
-  //    s2.write(0);
-  //    delay(1000);
-  //    Serial.println("Alarm2 Triggered");
-  //    Serial.println(Rtc.GetDateTime().Hour());
-  //  }
    
 }
