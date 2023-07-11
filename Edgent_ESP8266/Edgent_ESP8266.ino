@@ -28,12 +28,14 @@ void setup()
 {
   Serial.begin(115200);
   delay(100);
-  s1.attach(0); 
-  s2.attach(16);
+  s1.attach(12); 
+  //s2.attach(16);
   Rtc.Begin();
   RtcDateTime compiled = RtcDateTime(__DATE__, __TIME__);
   Rtc.SetDateTime(compiled);
   RtcDateTime now = Rtc.GetDateTime();
+
+  pinMode(16,OUTPUT);
 
   BlynkEdgent.begin();
 }
@@ -43,24 +45,27 @@ BLYNK_WRITE(V0)
     int value = param.asInt();
     if(value == 1){
       s1.write(180);
+      tone(16,1000);
       delay(1000);
+      noTone(16);
       s1.write(0);
       delay(1000);
+      Serial.println(Rtc.GetDateTime().Hour());
       Serial.println("Servo1 activated");
     }
 }
 
-BLYNK_WRITE(V1)
-{
-    int value = param.asInt();
-    if(value == 1){
-      s2.write(180);
-      delay(1000);
-      s2.write(0);
-      delay(1000);
-      Serial.println("Servo2 activated");
-    }
-}
+// BLYNK_WRITE(V1)
+// {
+//     int value = param.asInt();
+//     if(value == 1){
+//       s2.write(180);
+//       delay(1000);
+//       s2.write(0);
+//       delay(1000);
+//       Serial.println("Servo2 activated");
+//     }
+// }
 
 BLYNK_WRITE(V2){
  alarm1 = param[0].asInt();
@@ -70,13 +75,13 @@ BLYNK_WRITE(V2){
  }
 }
 
-BLYNK_WRITE(V3){
- alarm2 = param[0].asInt();
- if(alarm2 == 0)
- {
-  alarm2 = 999999;
- }
-}
+// BLYNK_WRITE(V3){
+//  alarm2 = param[0].asInt();
+//  if(alarm2 == 0)
+//  {
+//   alarm2 = 999999;
+//  }
+//}
 
 void loop() {
   BlynkEdgent.run();
@@ -85,17 +90,22 @@ void loop() {
 
    if(alarm1 == currentTime){
      s1.write(180);
+     tone(16,1000);
      delay(1000);
+     noTone(16);
      s1.write(0);
      delay(1000);
      Serial.println("Alarm1 Triggered");
+     Serial.println(Rtc.GetDateTime().Hour());
+
    }
-   if(alarm2 == currentTime){
-     s2.write(180);
-     delay(1000);
-     s2.write(0);
-     delay(1000);
-     Serial.println("Alarm2 Triggered");
-   }
+  //  if(alarm2 == currentTime){
+  //    s2.write(180);
+  //    delay(1000);
+  //    s2.write(0);
+  //    delay(1000);
+  //    Serial.println("Alarm2 Triggered");
+  //    Serial.println(Rtc.GetDateTime().Hour());
+  //  }
    
 }
